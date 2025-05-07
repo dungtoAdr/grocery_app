@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/screen/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Scaffold(
-        body: Image.asset('assets/pic1.png',fit: BoxFit.cover,height: double.infinity,width: double.infinity,),
-      ),
+      home: SplashScreen(),
     );
   }
 }
