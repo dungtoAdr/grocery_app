@@ -67,6 +67,22 @@ flutter:
     - assets/pic3.png
     - assets/pic4.png
     - assets/bigCart.png
+    - assets/bigCart2x.png
+    - assets/welcome_img.png
+    - assets/gg_logo.png
+    - assets/ic_google.png
+    - assets/ic_person.png
+    - assets/login_img.png
+    - assets/signup_img.png
+    - assets/baner_1.png
+    - assets/beverages.png
+    - assets/edible_oil.png
+    - assets/fruits.png
+    - assets/grocery.png
+    - assets/household.png
+    - assets/vegetable.png
+    - assets/product_img.png
+    - assets/product_img_2x.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

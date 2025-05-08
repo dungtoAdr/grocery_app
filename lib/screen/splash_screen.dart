@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:grocery_app/screen/auth/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     {
       'image': 'assets/pic4.png',
       'title': 'Welcome to',
-      'image2': 'assets/bigCart.png',
+      'image2': 'assets/bigCart2x.png',
     },
     {'image': 'assets/pic1.png', 'title': 'Get Discounts \n On All Products'},
     {'image': 'assets/pic2.png', 'title': 'Buy Premium \n Quality Fruits'},
@@ -59,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                 ),
                               ),
                               _slides[index]['image2'] != null
-                                  ? Image.asset(_slides[index]['image2']!)
+                                  ? Image.asset(_slides[index]['image2']!,width: 127,height: 50,)
                                   : SizedBox(),
                             ],
                           ),
@@ -119,10 +121,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen(),));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
+                        padding: EdgeInsets.all(15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
