@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,6 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _startAutoSlide();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
   }
 
   void _startAutoSlide() {
@@ -263,17 +271,55 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 2,
+                          childAspectRatio: 0.73,
                         ),
                     itemCount: _products.length,
                     itemBuilder: (context, index) {
                       return Card(
+                        color: Colors.white,
                         elevation: 4,
                         child: Padding(
-                          padding: EdgeInsets.all(8),
+                          padding: EdgeInsets.only(top: 15, right: 0, left: 0),
                           child: Column(
                             children: [
-                              Image.asset(_products[index]['image'],height: 94,width: 91,),
-                              Text(_products[index]['price'],style: TextStyle(color: Colors.green),)
+                              Image.asset(
+                                _products[index]['image'],
+                                height: 94,
+                                width: 91,
+                              ),
+                              Text(
+                                "\$${_products[index]['price']}",
+                                style: TextStyle(color: Colors.green),
+                              ),
+                              Text(
+                                _products[index]['name'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                _products[index]['weighed'],
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Divider(),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {},
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.shopping_cart_outlined,
+                                      color: Colors.green,
+                                    ),
+                                    Text(
+                                      "Add to cart",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
