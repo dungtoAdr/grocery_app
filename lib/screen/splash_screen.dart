@@ -21,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
     {'image': 'assets/pic1.png', 'title': 'Get Discounts \n On All Products'},
     {'image': 'assets/pic2.png', 'title': 'Buy Premium \n Quality Fruits'},
     {'image': 'assets/pic3.png', 'title': 'Buy Quality \n Dairy Products'},
-
   ];
 
   @override
@@ -61,7 +60,11 @@ class _SplashScreenState extends State<SplashScreen> {
                                 ),
                               ),
                               _slides[index]['image2'] != null
-                                  ? Image.asset(_slides[index]['image2']!,width: 127,height: 50,)
+                                  ? Image.asset(
+                                    _slides[index]['image2']!,
+                                    width: 127,
+                                    height: 50,
+                                  )
                                   : SizedBox(),
                             ],
                           ),
@@ -122,7 +125,11 @@ class _SplashScreenState extends State<SplashScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen(),));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => WelcomeScreen(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

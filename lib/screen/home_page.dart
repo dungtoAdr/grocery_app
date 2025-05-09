@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screen/home/account_screen.dart';
+import 'package:grocery_app/screen/home/cart_screen.dart';
 import 'package:grocery_app/screen/home/favorite_screen.dart';
 import 'package:grocery_app/screen/home/home_screen.dart';
 
@@ -85,7 +86,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(),));
+        },
         backgroundColor: Colors.green[400],
         foregroundColor: Colors.white,
         shape: const CircleBorder(),

@@ -2,6 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grocery_app/models/category.dart';
+import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/screen/home/categories_screen.dart';
+import 'package:grocery_app/screen/home/product_detail.dart';
+import 'package:grocery_app/screen/home/products_by_category_screen.dart';
+import 'package:grocery_app/screen/utils/category_item.dart';
+import 'package:grocery_app/screen/utils/data.dart';
+import 'package:grocery_app/screen/utils/product_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,67 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
   Timer? _timer;
+  List<Product> products = Data.products.map((e) => Product.fromMap(e),).toList();
+  List<Category> categories = Data.categories.map((e) => Category.fromMap(e),).toList();
   final List<String> _slides = [
     'assets/baner_1.png',
     'assets/pic2.png',
     'assets/pic3.png',
     'assets/pic4.png',
-  ];
-
-  final List<Map<String, dynamic>> _products = [
-    {
-      'name': "Fresh Peach",
-      'price': 8.00,
-      'image': 'assets/product_img_2x.png',
-      'weighed': 'dozen',
-    },
-    {
-      'name': "Fresh Peach",
-      'price': 8.00,
-      'image': 'assets/product_img_2x.png',
-      'weighed': 'dozen',
-    },
-    {
-      'name': "Fresh Peach",
-      'price': 8.00,
-      'image': 'assets/product_img_2x.png',
-      'weighed': 'dozen',
-    },
-    {
-      'name': "Fresh Peach",
-      'price': 8.00,
-      'image': 'assets/product_img_2x.png',
-      'weighed': 'dozen',
-    },
-  ];
-
-  final List<Map<String, dynamic>> _categories = [
-    {
-      'name': "Vegetables",
-      'image': 'assets/vegetable.png',
-      'color': Colors.green[100],
-    },
-    {'name': "Fruits", 'image': 'assets/fruits.png', 'color': Colors.red[100]},
-    {
-      'name': "Beverages",
-      'image': 'assets/beverages.png',
-      'color': Colors.yellow[100],
-    },
-    {
-      'name': "Grocery",
-      'image': 'assets/grocery.png',
-      'color': Colors.purple[100],
-    },
-    {
-      'name': "Edible oil",
-      'image': 'assets/edible_oil.png',
-      'color': Colors.blue[100],
-    },
-    {
-      'name': "Household",
-      'image': 'assets/household.png',
-      'color': Colors.pink[100],
-    },
   ];
 
   @override
@@ -129,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       prefixIcon: Icon(Icons.search),
                       labelText: "Search keywords...",
                       suffixIcon: Icon(Icons.density_medium_sharp),
+                      disabledBorder: OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -193,7 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         flex: 1,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesScreen(),
+                              ),
+                            );
+                          },
                           icon: Icon(
                             Icons.arrow_forward_ios_outlined,
                             size: 20,
@@ -207,30 +169,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 100,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: _categories.length,
+                    itemCount: categories.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: _categories[index]['color'],
-                              radius: 30,
-                              child: Image.asset(
-                                _categories[index]['image'],
-                                fit: BoxFit.fill,
-                                width: 30,
-                                height: 30,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              _categories[index]['name'],
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      );
+                      final category = categories[index];
+                      return CategoryItem(category: category,isHome: true,);
                     },
                   ),
                 ),
@@ -251,7 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         flex: 1,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsByCategoryScreen(),));
+                          },
                           icon: Icon(
                             Icons.arrow_forward_ios_outlined,
                             size: 20,
@@ -262,68 +206,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(5),
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 2,
-                          childAspectRatio: 0.73,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          mainAxisExtent: 250,
                         ),
-                    itemCount: _products.length,
+                    itemCount: products.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        color: Colors.white,
-                        elevation: 4,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 15, right: 0, left: 0),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                _products[index]['image'],
-                                height: 94,
-                                width: 91,
-                              ),
-                              Text(
-                                "\$${_products[index]['price']}",
-                                style: TextStyle(color: Colors.green),
-                              ),
-                              Text(
-                                _products[index]['name'],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                _products[index]['weighed'],
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Divider(),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                onPressed: () {},
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.shopping_cart_outlined,
-                                      color: Colors.green,
-                                    ),
-                                    Text(
-                                      "Add to cart",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      final product = products[index];
+                      return ProductItem(product: product);
                     },
                   ),
                 ),
