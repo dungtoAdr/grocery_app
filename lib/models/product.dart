@@ -21,14 +21,19 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'],
-      name: map['name'],
-      price: map['price'],
+      id: int.parse(map['id']),
+     name: map['name'],
+      price: double.parse(map['price']),
       image: map['image'],
       weighed: map['weighed'],
-      category_id: map['category_id'],
-      quantity: map['quantity'],
-      isNew: map['isNew'],
+      category_id: int.parse(map['category_id']),
+      quantity: map['quantity'] ?? 0,
+      isNew: map['is_new'] == "1",
     );
   }
+
+  double totalPrice(){
+    return price * quantity;
+  }
+
 }

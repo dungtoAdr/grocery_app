@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screen/auth/forgot_screen.dart';
 import 'package:grocery_app/screen/home_page.dart';
@@ -12,8 +13,41 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
   bool isShowPass = true;
+  bool isLogin = true;
+
+  Future<void> handleAuth() async {
+    try {
+      if(_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        if (isLogin) {
+          await _auth.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passController.text,
+          );
+        } else {
+          await _auth.createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passController.text,
+          );
+        }
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Thanh Cong")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Lỗi: $e")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +122,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 hintText: "Email Address",
                                 prefixIcon: Icon(Icons.email_outlined),
                               ),
+                              controller: emailController,
                             ),
                             !widget.isLogin
                                 ? TextFormField(
@@ -117,6 +152,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                 ),
                               ),
+                              controller: passController,
                               obscureText: isShowPass,
                             ),
                           ],
@@ -148,12 +184,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           widget.isLogin
-                              ? Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              )
+                              ? handleAuth()
                               : print("signup");
                           _formKey.currentState!.reset();
                         },

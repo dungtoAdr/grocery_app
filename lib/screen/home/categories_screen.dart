@@ -9,8 +9,7 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Category> categories =
-        Data.categories.map((e) => Category.fromMap(e)).toList();
+    List<Category> categories = Data.categories;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

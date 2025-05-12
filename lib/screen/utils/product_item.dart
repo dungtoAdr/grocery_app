@@ -14,7 +14,7 @@ class ProductItem extends StatelessWidget {
       onTap:
           () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProductDetail()),
+            MaterialPageRoute(builder: (context) => ProductDetail(product: product,)),
           ),
       child: Card(
         color: Colors.white,

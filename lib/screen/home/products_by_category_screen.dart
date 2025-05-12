@@ -24,7 +24,7 @@ class _ProductsByCategoryScreenState extends State<ProductsByCategoryScreen> {
   @override
   void initState() {
     super.initState();
-    products = Data.products.map((e) => Product.fromMap(e)).toList();
+    products = Data.products;
     productsByCate =
         products.where((product) => product.category_id == widget.id).toList();
     if (widget.id == null) {

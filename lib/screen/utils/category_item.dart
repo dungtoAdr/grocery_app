@@ -32,7 +32,7 @@ class CategoryItem extends StatelessWidget {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      backgroundColor: category.color,
+                      backgroundColor: Color(category.color),
                       radius: 30,
                       child: Image.asset(
                         category.image,
@@ -53,7 +53,7 @@ class CategoryItem extends StatelessWidget {
                   child: Column(
                     children: [
                       CircleAvatar(
-                        backgroundColor: category.color,
+                        backgroundColor: Color(category.color),
                         radius: 30,
                         child: Image.asset(
                           category.image,

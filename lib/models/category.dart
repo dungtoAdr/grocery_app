@@ -4,7 +4,7 @@ class Category {
   final int id;
   final String name;
   final String image;
-  final Color color;
+  final int color;
 
   Category({
     required this.id,
@@ -14,10 +14,10 @@ class Category {
   });
 
   factory Category.fromMap(Map<String, dynamic> map){
-    return Category(id: map['id'],
+    return Category(id: int.parse(map['id']),
         name: map['name'],
         image: map['image'],
-        color: map['color']);
+        color: int.parse(map['color']));
   }
 
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+  Product product;
+  ProductDetail({super.key, required this.product});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -26,7 +28,7 @@ class _ProductDetailState extends State<ProductDetail> {
               color: Colors.green[50],
               height: 400,
               width: 480,
-              child: Image.asset('assets/lemon.png'),
+              child: Image.asset(widget.product.image,fit: BoxFit.contain,),
             ),
             Spacer(),
             Container(
@@ -51,7 +53,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     Row(
                       children: [
                         Text(
-                          "\$2.22",
+                          "\$${widget.product.price.toString()}",
                           style: TextStyle(
                             color: Colors.green[700],
                             fontWeight: FontWeight.bold,
@@ -66,24 +68,24 @@ class _ProductDetailState extends State<ProductDetail> {
                       ],
                     ),
                     Text(
-                      "Organic Lemons",
+                      widget.product.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text("1.50 lbs", style: TextStyle(color: Colors.grey[600])),
+                    Text(widget.product.weighed, style: TextStyle(color: Colors.grey[600])),
                     SizedBox(height: 5),
                     Row(
                       children: [
                         Text(
-                          '4.5',
+                          '4',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 4),
                         RatingBarIndicator(
-                          rating: 4.5,
+                          rating: 4,
                           itemBuilder:
                               (context, index) =>
                                   Icon(Icons.star, color: Colors.amber),
@@ -169,7 +171,18 @@ class _ProductDetailState extends State<ProductDetail> {
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          if (Data.product_cart.isNotEmpty) {
+                            for (int i = 0; i < Data.product_cart.length; i++) {
+                              if (widget.product.id == Data.product_cart[i].id) {
+                                widget.product.quantity+=quantity;
+                                return;
+                              }
+                            }
+                          }
+                          Data.product_cart.add(widget.product);
+                          widget.product.quantity+=quantity;
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text("Add to cart"),
