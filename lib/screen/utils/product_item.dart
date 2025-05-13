@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
-import 'package:grocery_app/screen/home/product_detail.dart';
+import 'package:grocery_app/screen/homepage/home/product_detail.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 
 class ProductItem extends StatelessWidget {

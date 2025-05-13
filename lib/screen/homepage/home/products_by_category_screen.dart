@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
-import 'package:grocery_app/screen/home/product_detail.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 import 'package:grocery_app/screen/utils/product_item.dart';
 

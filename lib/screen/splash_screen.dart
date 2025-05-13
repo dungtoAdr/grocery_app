@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_app/screen/auth/welcome_screen.dart';
+import 'package:grocery_app/screen/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,6 +24,22 @@ class _SplashScreenState extends State<SplashScreen> {
     {'image': 'assets/pic2.png', 'title': 'Buy Premium \n Quality Fruits'},
     {'image': 'assets/pic3.png', 'title': 'Buy Quality \n Dairy Products'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  void _checkLoginStatus() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => HomePage()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

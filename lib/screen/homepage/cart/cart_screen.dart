@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/screen/homepage/cart/shipping_method_screen.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 
 class CartScreen extends StatefulWidget {
@@ -43,8 +44,18 @@ class _CartScreenState extends State<CartScreen> {
                   spacing: 10,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.shopping_bag_outlined,size: 150,color: Colors.green,),
-                    Text("Your cart is empty !",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    Icon(
+                      Icons.shopping_bag_outlined,
+                      size: 150,
+                      color: Colors.green,
+                    ),
+                    Text(
+                      "Your cart is empty !",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       "You will get a response within\na few minutes",
                       style: TextStyle(color: Colors.grey),
@@ -234,7 +245,15 @@ class _CartScreenState extends State<CartScreen> {
                                 padding: EdgeInsets.only(top: 10, bottom: 20),
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => ShippingMethodScreen(),
+                                      ),
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
                                     foregroundColor: Colors.white,

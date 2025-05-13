@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class ForgotScreen extends StatelessWidget {
   const ForgotScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final TextEditingController email = TextEditingController();
+    final auth = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
@@ -34,6 +40,7 @@ class ForgotScreen extends StatelessWidget {
             Text("sadipscing elitr, sed diam nonumy"),
             SizedBox(height: 30),
             TextFormField(
+              controller: email,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Email Address",
@@ -44,7 +51,9 @@ class ForgotScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  auth.forgotPass(email.text);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,

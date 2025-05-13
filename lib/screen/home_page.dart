@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/screen/home/account_screen.dart';
-import 'package:grocery_app/screen/home/cart_screen.dart';
-import 'package:grocery_app/screen/home/favorite_screen.dart';
-import 'package:grocery_app/screen/home/home_screen.dart';
+import 'package:grocery_app/screen/homepage/account/account_screen.dart';
+import 'package:grocery_app/screen/homepage/cart/cart_screen.dart';
+import 'package:grocery_app/screen/homepage/favorite_screen.dart';
+import 'package:grocery_app/screen/homepage/home/home_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

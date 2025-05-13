@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/category.dart';
-import 'package:grocery_app/screen/home/products_by_category_screen.dart';
+import 'package:grocery_app/screen/homepage/home/products_by_category_screen.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;

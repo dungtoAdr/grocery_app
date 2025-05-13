@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/screen/auth/forgot_screen.dart';
 import 'package:grocery_app/screen/home_page.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   bool isLogin;
@@ -13,44 +14,50 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
   bool isShowPass = true;
   bool isLogin = true;
+  bool _isLoading = false;
 
-  Future<void> handleAuth() async {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailController.clear();
+    passController.clear();
+  }
+
+  void _signUp() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+
+    final auth = Provider.of<AuthProvider>(context, listen: false);
     try {
-      if(_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-        if (isLogin) {
-          await _auth.signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passController.text,
-          );
-        } else {
-          await _auth.createUserWithEmailAndPassword(
-            email: emailController.text,
-            password: passController.text,
-          );
-        }
-        Navigator.of(
+      final user = await auth.signUp(
+        emailController.text.trim(),
+        passController.text.trim(),
+      );
+      if (user != null) {
+        Navigator.pushReplacement(
           context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Thanh Cong")));
+          MaterialPageRoute(builder: (_) => HomePage()),
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Lỗi: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Đăng ký thất bại: ${e.toString()}')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -182,11 +189,31 @@ class _AuthScreenState extends State<AuthScreen> {
                       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          widget.isLogin
-                              ? handleAuth()
-                              : print("signup");
-                          _formKey.currentState!.reset();
+                        onPressed: () async {
+                          if (widget.isLogin) {
+                            final success = await auth.login(
+                              emailController.text,
+                              passController.text,
+                            );
+                            if (success) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => HomePage()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Đăng nhập thất bại. Kiểm tra email và mật khẩu.",
+                                  ),
+                                ),
+                              );
+                            }
+                            _formKey.currentState!.reset();
+                          } else {
+                            _signUp();
+                            _formKey.currentState!.reset();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
