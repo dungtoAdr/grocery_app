@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screen/home_page.dart';
+import 'package:grocery_app/screen/homepage/cart/order_success_screen.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -81,7 +82,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         ),
       ),
 
-      // ✅ Bottom Button
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16),
         child: ElevatedButton(
@@ -92,7 +92,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             Data.product_cart.clear();
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => OrderSuccessScreen()),
               (route) => false,
             );
           },

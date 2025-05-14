@@ -67,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.search),
                           hintText: "Search keywords...",
-                          suffixIcon: Icon(Icons.filter_list),
+                          suffixIcon: Icon(Icons.density_medium_sharp),
                           disabledBorder: OutlineInputBorder(),
                         ),
                       ),
@@ -95,7 +95,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               );
             },
-            child: ListTile(title: Text(_filteredItems[index].name)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Card(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage(_filteredItems[index].image),
+                  ),
+                  title: Text(_filteredItems[index].name),
+                ),
+              ),
+            ),
           );
         },
       ),

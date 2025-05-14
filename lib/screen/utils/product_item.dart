@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/screen/homepage/home/product_detail.dart';
 import 'package:grocery_app/screen/utils/data.dart';
+import 'package:provider/provider.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
@@ -14,7 +16,9 @@ class ProductItem extends StatelessWidget {
       onTap:
           () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProductDetail(product: product,)),
+            MaterialPageRoute(
+              builder: (context) => ProductDetail(product: product),
+            ),
           ),
       child: Card(
         color: Colors.white,
@@ -77,6 +81,7 @@ class ProductItem extends StatelessWidget {
                       }
                       Data.product_cart.add(product);
                       product.quantity++;
+                      // Provider.of<CartProvider>(context,listen: false).addToCart(product, 1);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +89,7 @@ class ProductItem extends StatelessWidget {
                         Icon(Icons.shopping_bag_outlined, color: Colors.green),
                         SizedBox(width: 5),
                         Text(
-                           "Add to cart",
+                          "Add to cart",
                           style: TextStyle(color: Colors.black),
                         ),
                       ],

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/screen/utils/data.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetail extends StatefulWidget {
   Product product;
+
   ProductDetail({super.key, required this.product});
 
   @override
@@ -28,7 +31,7 @@ class _ProductDetailState extends State<ProductDetail> {
               color: Colors.green[50],
               height: 400,
               width: 480,
-              child: Image.asset(widget.product.image,fit: BoxFit.contain,),
+              child: Image.asset(widget.product.image, fit: BoxFit.contain),
             ),
             Spacer(),
             Container(
@@ -75,7 +78,10 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text(widget.product.weighed, style: TextStyle(color: Colors.grey[600])),
+                    Text(
+                      widget.product.weighed,
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
                     SizedBox(height: 5),
                     Row(
                       children: [
@@ -174,14 +180,16 @@ class _ProductDetailState extends State<ProductDetail> {
                         onPressed: () {
                           if (Data.product_cart.isNotEmpty) {
                             for (int i = 0; i < Data.product_cart.length; i++) {
-                              if (widget.product.id == Data.product_cart[i].id) {
-                                widget.product.quantity+=quantity;
+                              if (widget.product.id ==
+                                  Data.product_cart[i].id) {
+                                widget.product.quantity += quantity;
                                 return;
                               }
                             }
                           }
                           Data.product_cart.add(widget.product);
-                          widget.product.quantity+=quantity;
+                          widget.product.quantity += quantity;
+                          // Provider.of<CartProvider>(context,listen: false).addToCart(widget.product, quantity);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
