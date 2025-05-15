@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/models/profile_user.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/user_provider.dart';
 import 'package:grocery_app/screen/auth/forgot_screen.dart';
 import 'package:grocery_app/screen/home_page.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,8 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final phoneController = TextEditingController();
+  final nameController = TextEditingController();
   bool isShowPass = true;
   bool isLogin = true;
   bool _isLoading = false;
@@ -40,6 +44,15 @@ class _AuthScreenState extends State<AuthScreen> {
         passController.text.trim(),
       );
       if (user != null) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        await userProvider.addUser(
+          ProfileUser(
+            name: nameController.text,
+            gmail: emailController.text,
+            phone: phoneController.text,
+            uid: user.uid,
+          ),
+        );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => HomePage()),
@@ -132,13 +145,27 @@ class _AuthScreenState extends State<AuthScreen> {
                               controller: emailController,
                             ),
                             !widget.isLogin
-                                ? TextFormField(
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: "Phone number",
-                                    prefixIcon: Icon(Icons.phone),
-                                  ),
+                                ? Column(
+                                  spacing: 10,
+                                  children: [
+                                    TextFormField(
+                                      keyboardType: TextInputType.phone,
+                                      controller: phoneController,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "Phone number",
+                                        prefixIcon: Icon(Icons.phone),
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      controller: nameController,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: "Name",
+                                        prefixIcon: Icon(Icons.person),
+                                      ),
+                                    ),
+                                  ],
                                 )
                                 : SizedBox(),
                             TextFormField(

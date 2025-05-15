@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/models/address.dart';
+import 'package:grocery_app/providers/address_provider.dart';
 import 'package:grocery_app/screen/homepage/cart/payment_method_screen.dart';
+import 'package:provider/provider.dart';
 
 class ShippingAddressScreen extends StatefulWidget {
   const ShippingAddressScreen({super.key});
@@ -81,6 +85,21 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
   }
 
   void _onNext() {
+    if (_saveAddress) {
+      final userProvider = Provider.of<AddressProvider>(context, listen: false);
+      final currentUser = FirebaseAuth.instance.currentUser;
+      userProvider.addAddress(
+        Address(
+          name: _nameController.text,
+          phone: _phoneController.text,
+          address: _addressController.text,
+          zipcode: int.parse(_zipController.text),
+          city: _cityController.text,
+          country: _selectedCountry.toString(),
+          user_uid: currentUser!.uid,
+        ),
+      );
+    }
     if (_formKey.currentState!.validate() && _selectedCountry != null) {
       print("Address Saved: $_saveAddress");
       print("Country: $_selectedCountry");
@@ -203,7 +222,9 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
                 minimumSize: const Size.fromHeight(50),
               ),
               child: const Text("Next", style: TextStyle(fontSize: 16)),

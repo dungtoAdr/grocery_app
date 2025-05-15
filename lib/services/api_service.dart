@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:grocery_app/models/address.dart';
 import 'package:grocery_app/models/category.dart';
 import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/models/profile_user.dart';
@@ -53,11 +54,78 @@ class ApiService {
     }
   }
 
+  static Future<bool> addUser(ProfileUser user) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/add_user.php"),
+        body: jsonEncode(user.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error: $e");
+      return false;
+    }
+  }
+
   static Future<bool> updateUser(ProfileUser user) async {
     try {
       final response = await http.post(
         Uri.parse("$baseUrl/update_user.php"),
         body: jsonEncode(user.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error: $e");
+      return false;
+    }
+  }
+
+  //address
+  static Future<List<Address>> getAddress() async {
+    final response = await http.get(Uri.parse("$baseUrl/get_address.php"));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      if (jsonData['success']) {
+        List list = jsonData['data'];
+        return list.map((e) => Address.fromJson(e)).toList();
+      } else {
+        throw Exception("Loi api ${jsonData['message']}");
+      }
+    } else {
+      throw Exception("HTTP Error ${response.statusCode}");
+    }
+  }
+
+  static Future<bool> addAddress(Address address) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/add_address.php"),
+        body: jsonEncode(address.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error: $e");
+      return false;
+    }
+  }
+
+  static Future<bool> updateAddress(Address address) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/update_address.php"),
+        body: jsonEncode(address.toJson()),
       );
       if (response.statusCode == 200) {
         return true;
