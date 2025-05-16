@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screen/homepage/home/product_detail.dart';
 import 'package:grocery_app/screen/utils/data.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,12 +14,13 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
+  List<Product> products = [];
   List<Product> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-
+    products = Provider.of<ProductProvider>(context, listen: false).products;
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -25,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
     String keyword = _searchController.text.toLowerCase();
     setState(() {
       _filteredItems =
-          Data.products
+          products
               .where((item) => item.name.toLowerCase().contains(keyword))
               .toList();
     });

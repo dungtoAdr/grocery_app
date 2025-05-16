@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/screen/homepage/cart/shipping_method_screen.dart';
 import 'package:grocery_app/screen/utils/data.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -10,21 +13,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double subTotal = 0;
-
-  double total() {
-    subTotal = 0;
-    for (int i = 0; i < Data.product_cart.length; i++) {
-      subTotal += Data.product_cart[i].totalPrice();
-    }
-    return subTotal;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    total();
   }
 
   @override
@@ -37,8 +29,15 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body:
-          Data.product_cart.isEmpty
+      body: Consumer<CartProvider>(
+        builder: (context, value, child) {
+          List<Product> cart = value.cart;
+
+          final cartProvider = Provider.of<CartProvider>(
+            context,
+            listen: false,
+          );
+          return cart.isEmpty
               ? Center(
                 child: Column(
                   spacing: 10,
@@ -68,9 +67,9 @@ class _CartScreenState extends State<CartScreen> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: Data.product_cart.length,
+                      itemCount: cart.length,
                       itemBuilder: (context, index) {
-                        final product = Data.product_cart[index];
+                        final product = cart[index];
                         return Padding(
                           padding: const EdgeInsets.only(
                             top: 8.0,
@@ -92,11 +91,14 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                               onDismissed: (direction) {
-                                setState(() {
-                                  Data.product_cart[index].quantity = 0;
-                                  Data.product_cart.removeAt(index);
-                                  total();
-                                });
+                                product.quantity = 0;
+                                cartProvider.removeFromCart(index);
+                                cartProvider.subTotal;
+                                // setState(() {
+                                //   // Data.product_cart[index].quantity = 0;
+                                //   // Data.product_cart.removeAt(index);
+                                //   total(cart);
+                                // });
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -140,8 +142,11 @@ class _CartScreenState extends State<CartScreen> {
                                           icon: Icon(Icons.add),
                                           color: Colors.green,
                                           onPressed: () {
-                                            setState(() {});
-                                            product.quantity++;
+                                            cartProvider.increaseQuantity(
+                                              index,
+                                            );
+                                            // setState(() {});
+                                            // product.quantity++;
                                           },
                                         ),
                                         Text(product.quantity.toString()),
@@ -149,13 +154,17 @@ class _CartScreenState extends State<CartScreen> {
                                           icon: Icon(Icons.remove),
                                           color: Colors.green,
                                           onPressed: () {
-                                            setState(() {});
                                             if (product.quantity == 1) {
                                               return;
                                             } else {
-                                              product.quantity--;
+                                              // product.quantity--;
+                                              cartProvider.decreaseQuantity(
+                                                index,
+                                              );
                                             }
-                                            total();
+                                            // setState(() {});
+                                            cartProvider.subTotal;
+                                            // total(cart);
                                           },
                                         ),
                                       ],
@@ -188,7 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "\$${total()}",
+                                    "\$${cartProvider.subTotal}",
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                 ],
@@ -201,9 +210,7 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    Data.product_cart.isEmpty
-                                        ? "\$0.0"
-                                        : "\$1.6",
+                                    cart.isEmpty ? "\$0.0" : "\$1.6",
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                 ],
@@ -231,9 +238,9 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    Data.product_cart.isEmpty
+                                    cart.isEmpty
                                         ? "\$0.0"
-                                        : "\$${subTotal + 1.6}",
+                                        : "\$${cartProvider.subTotal + 1.6}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
@@ -287,7 +294,9 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                 ],
-              ),
+              );
+        },
+      ),
     );
   }
 }

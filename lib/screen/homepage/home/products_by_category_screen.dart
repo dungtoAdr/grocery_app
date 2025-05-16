@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screen/utils/data.dart';
 import 'package:grocery_app/screen/utils/product_item.dart';
+import 'package:provider/provider.dart';
 
 class ProductsByCategoryScreen extends StatefulWidget {
   final int? id;
@@ -23,7 +25,7 @@ class _ProductsByCategoryScreenState extends State<ProductsByCategoryScreen> {
   @override
   void initState() {
     super.initState();
-    products = Data.products;
+    products = Provider.of<ProductProvider>(context, listen: false).products;
     productsByCate =
         products.where((product) => product.category_id == widget.id).toList();
     if (widget.id == null) {

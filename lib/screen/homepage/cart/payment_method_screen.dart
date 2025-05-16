@@ -1,15 +1,60 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/models/order.dart';
+import 'package:grocery_app/models/order_detail.dart';
+import 'package:grocery_app/models/product.dart';
+import 'package:grocery_app/providers/address_provider.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/order_provider.dart';
+import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screen/home_page.dart';
 import 'package:grocery_app/screen/homepage/cart/order_success_screen.dart';
+import 'package:grocery_app/screen/homepage/home/product_detail.dart';
 import 'package:grocery_app/screen/utils/data.dart';
+import 'package:provider/provider.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
+  final String address_id;
+
+  const PaymentMethodScreen({super.key, required this.address_id});
+
   @override
   _PaymentMethodScreenState createState() => _PaymentMethodScreenState();
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   bool saveCard = false;
+
+  Widget _buildStepIndicator(
+    int step,
+    String label,
+    bool active,
+    bool completed,
+  ) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 16,
+          backgroundColor:
+              completed
+                  ? Colors.green
+                  : (active ? Colors.green : Colors.grey[300]),
+          child:
+              completed
+                  ? const Icon(Icons.check, size: 18, color: Colors.white)
+                  : Text(
+                    step.toString(),
+                    style: TextStyle(
+                      color: active ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+        ),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +70,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Step indicator
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                stepItem("DELIVERY", true),
-                stepItem("ADDRESS", true),
-                stepItem("PAYMENT", true, number: 3),
+                _buildStepIndicator(1, "DELIVERY", false, true),
+                _buildStepIndicator(2, "ADDRESS", false, true),
+                _buildStepIndicator(3, "PAYMENT", true, false),
               ],
             ),
             SizedBox(height: 20),
@@ -47,10 +91,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             ),
             SizedBox(height: 20),
 
-            // Credit Card UI
             cardDisplay(),
 
-            // Input fields
             buildInputField(Icons.person, "Name on the card"),
             buildInputField(Icons.credit_card, "Card number"),
             Row(
@@ -63,7 +105,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               ],
             ),
 
-            // Save card toggle
             Row(
               children: [
                 Switch(
@@ -77,7 +118,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               ],
             ),
 
-            SizedBox(height: 100), // Để không che mất phần trên khi cuộn
+            SizedBox(height: 100),
           ],
         ),
       ),
@@ -85,11 +126,34 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16),
         child: ElevatedButton(
-          onPressed: () {
-            ScaffoldMessenger.of(
+          onPressed: () async {
+            final cartProvider = Provider.of<CartProvider>(
               context,
-            ).showSnackBar(SnackBar(content: Text('Processing payment...')));
-            Data.product_cart.clear();
+              listen: false,
+            );
+            final cart = cartProvider.cart;
+            final order = Provider.of<OrderProvider>(context, listen: false);
+            List<OrderDetail> details = [];
+            for (int i = 0; i < cart.length; i++) {
+              details.add(
+                OrderDetail(
+                  product_id: cart[i].id,
+                  sub_total: cart[i].totalPrice(),
+                  quantity: cart[i].quantity,
+                ),
+              );
+            }
+            await order.addOrder(
+              Order(
+                uid: FirebaseAuth.instance.currentUser!.uid,
+                address_id: int.parse(widget.address_id),
+                status: 1,
+                total: cartProvider.subTotal,
+                details: details,
+              ),
+            );
+            cartProvider.removeAll();
+            // Data.product_cart.clear();
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => OrderSuccessScreen()),

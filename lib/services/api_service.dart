@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:grocery_app/models/address.dart';
 import 'package:grocery_app/models/category.dart';
+import 'package:grocery_app/models/order.dart';
 import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/models/profile_user.dart';
 import 'package:http/http.dart' as http;
@@ -126,6 +127,41 @@ class ApiService {
       final response = await http.post(
         Uri.parse("$baseUrl/update_address.php"),
         body: jsonEncode(address.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error: $e");
+      return false;
+    }
+  }
+
+  //order
+  static Future<List<Order>> getOrders(String uid) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/get_orders.php?user_uid=$uid"),
+    );
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      if (jsonData['success']) {
+        List list = jsonData['data'];
+        return list.map((e) => Order.fromJson(e)).toList();
+      } else {
+        throw Exception("Loi api ${jsonData['message']}");
+      }
+    } else {
+      throw Exception("HTTP Error ${response.statusCode}");
+    }
+  }
+
+  static Future<bool> addOrders(Order order) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/add_order.php"),
+        body: jsonEncode(order.toJson()),
       );
       if (response.statusCode == 200) {
         return true;

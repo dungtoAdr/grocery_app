@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/address.dart';
 import 'package:grocery_app/providers/address_provider.dart';
+import 'package:grocery_app/screen/homepage/account/add_address_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyAddressScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AddressProvider>(context, listen: false).getAddress();
     });
   }
@@ -29,41 +30,43 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Address"),
+        backgroundColor: Colors.white,
+        title: Text("Địa chỉ của tôi"),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              // TODO: Navigate to add address screen
-              ScaffoldMessenger.of(
+              Navigator.push(
                 context,
-              ).showSnackBar(SnackBar(content: Text("Add address pressed")));
+                MaterialPageRoute(builder: (context) => AddAddressScreen()),
+              );
             },
           ),
         ],
       ),
       body: Consumer<AddressProvider>(
         builder: (context, value, child) {
-          final addresses = value.addresses;
-          final addressProvider = Provider.of<AddressProvider>(
-            context,
-            listen: false,
-          );
-          if (makeDefaultSwitch.length != addresses.length) {
+          final allAddresses = value.addresses;
+          final userAddresses =
+              allAddresses
+                  .where((address) => address.user_uid == currentUser?.uid)
+                  .toList();
+
+          if (makeDefaultSwitch.length != userAddresses.length) {
             makeDefaultSwitch = List.generate(
-              addresses.length,
+              userAddresses.length,
               (i) => i == defaultIndex,
             );
           }
 
+          if (userAddresses.isEmpty) {
+            return Center(child: Text("Bạn chưa có địa chỉ nào."));
+          }
+
           return ListView.builder(
             padding: EdgeInsets.all(16),
-            itemCount: addresses.length,
+            itemCount: userAddresses.length,
             itemBuilder: (context, index) {
-              final userAddresses =
-                  addresses
-                      .where((element) => element.user_uid == currentUser!.uid)
-                      .toList();
               final address = userAddresses[index];
               final isExpanded = expandedCardIndex == index;
 
@@ -132,7 +135,7 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              "DEFAULT",
+                              "MẶC ĐỊNH",
                               style: TextStyle(color: Colors.green),
                             ),
                           ),
@@ -148,11 +151,11 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                           children: [
                             TextFormField(
                               controller: nameController,
-                              decoration: InputDecoration(labelText: "Name"),
+                              decoration: InputDecoration(labelText: "Họ tên"),
                             ),
                             TextFormField(
                               controller: addressController,
-                              decoration: InputDecoration(labelText: "Address"),
+                              decoration: InputDecoration(labelText: "Địa chỉ"),
                             ),
                             Row(
                               children: [
@@ -160,7 +163,7 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                                   child: TextFormField(
                                     controller: cityController,
                                     decoration: InputDecoration(
-                                      labelText: "City",
+                                      labelText: "Thành phố",
                                     ),
                                   ),
                                 ),
@@ -169,7 +172,7 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                                   child: TextFormField(
                                     controller: zipController,
                                     decoration: InputDecoration(
-                                      labelText: "Zip code",
+                                      labelText: "Mã bưu điện",
                                     ),
                                   ),
                                 ),
@@ -177,16 +180,18 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                             ),
                             TextFormField(
                               controller: countryController,
-                              decoration: InputDecoration(labelText: "Country"),
+                              decoration: InputDecoration(
+                                labelText: "Quốc gia",
+                              ),
                             ),
                             TextFormField(
                               controller: phoneController,
                               decoration: InputDecoration(
-                                labelText: "Phone number",
+                                labelText: "Số điện thoại",
                               ),
                             ),
                             SwitchListTile(
-                              title: Text("Make default"),
+                              title: Text("Đặt làm mặc định"),
                               value: makeDefaultSwitch[index],
                               onChanged: (val) {
                                 setState(() {
@@ -208,7 +213,10 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                                 backgroundColor: Colors.green,
                               ),
                               onPressed: () async {
-                                await addressProvider.updateAddress(
+                                await Provider.of<AddressProvider>(
+                                  context,
+                                  listen: false,
+                                ).updateAddress(
                                   Address(
                                     id: address.id,
                                     name: nameController.text,
@@ -217,10 +225,14 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                                     zipcode: int.parse(zipController.text),
                                     city: cityController.text,
                                     country: countryController.text,
+                                    user_uid: currentUser!.uid,
                                   ),
                                 );
+                                setState(() {
+                                  expandedCardIndex = null;
+                                });
                               },
-                              child: Text("Save settings"),
+                              child: Text("Lưu thay đổi"),
                             ),
                           ],
                         ),

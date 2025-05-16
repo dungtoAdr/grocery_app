@@ -42,15 +42,14 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       body: Consumer<UserProvider>(
         builder: (context, value, child) {
           final users = value.users;
-          final current_user = FirebaseAuth.instance.currentUser;
+          final currentUser = FirebaseAuth.instance.currentUser;
           final userProvider = Provider.of<UserProvider>(
             context,
             listen: false,
           );
           ProfileUser user = users.firstWhere(
-            (element) => element.uid.contains(current_user!.uid),
+            (element) => element.uid.contains(currentUser!.uid),
           );
-          print(user.uid);
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: Form(
@@ -125,7 +124,6 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        print(_nameController.text);
                         await userProvider.updateUser(
                           ProfileUser(
                             name:

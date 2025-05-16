@@ -178,18 +178,18 @@ class _ProductDetailState extends State<ProductDetail> {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () {
-                          if (Data.product_cart.isNotEmpty) {
-                            for (int i = 0; i < Data.product_cart.length; i++) {
-                              if (widget.product.id ==
-                                  Data.product_cart[i].id) {
-                                widget.product.quantity += quantity;
-                                return;
-                              }
-                            }
-                          }
-                          Data.product_cart.add(widget.product);
-                          widget.product.quantity += quantity;
-                          // Provider.of<CartProvider>(context,listen: false).addToCart(widget.product, quantity);
+                          // if (Data.product_cart.isNotEmpty) {
+                          //   for (int i = 0; i < Data.product_cart.length; i++) {
+                          //     if (widget.product.id ==
+                          //         Data.product_cart[i].id) {
+                          //       widget.product.quantity += quantity;
+                          //       return;
+                          //     }
+                          //   }
+                          // }
+                          // Data.product_cart.add(widget.product);
+                          // widget.product.quantity += quantity;
+                          Provider.of<CartProvider>(context,listen: false).addToCart(widget.product, quantity);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),

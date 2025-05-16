@@ -101,18 +101,18 @@ class Data {
   //   },
   // ];
 
-  static List<Category> _categories = [];
+  // static List<Category> _categories = [];
   static List<Product> _products = [];
 
   static List<Product> _product_cart = [];
 
   static List<Product> get product_cart => _product_cart;
 
-  static List<Category> get categories => _categories;
+  // static List<Category> get categories => _categories;
+  //
+  // static set categories(List<Category> categories) => _categories = categories;
 
-  static set categories(List<Category> categories) => _categories = categories;
+  // static List<Product> get products => _products;
 
-  static List<Product> get products => _products;
-
-  static set products(List<Product> products) => _products = products;
+  // static set products(List<Product> products) => _products = products;
 }

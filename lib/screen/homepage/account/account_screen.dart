@@ -8,6 +8,7 @@ import 'package:grocery_app/providers/user_provider.dart';
 import 'package:grocery_app/screen/auth/welcome_screen.dart';
 import 'package:grocery_app/screen/homepage/account/about_me_screen.dart';
 import 'package:grocery_app/screen/homepage/account/my_address_screen.dart';
+import 'package:grocery_app/screen/homepage/account/my_order_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -155,7 +156,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       _buildMenuItem(
                         Icons.inventory_2_outlined,
                         "My Orders",
-                        () {},
+                        () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrderScreen(),));
+                        },
                       ),
                       _buildMenuItem(
                         Icons.favorite_border,

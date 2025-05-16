@@ -73,8 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, categoryProvider, productProvider, child) {
             final categories = categoryProvider.categories;
             final products = productProvider.products;
-            Data.categories = categories;
-            Data.products = products;
             return categories.isEmpty && products.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(

@@ -71,17 +71,17 @@ class ProductItem extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      if (Data.product_cart.isNotEmpty) {
-                        for (int i = 0; i < Data.product_cart.length; i++) {
-                          if (product.id == Data.product_cart[i].id) {
-                            product.quantity++;
-                            return;
-                          }
-                        }
-                      }
-                      Data.product_cart.add(product);
-                      product.quantity++;
-                      // Provider.of<CartProvider>(context,listen: false).addToCart(product, 1);
+                      // if (Data.product_cart.isNotEmpty) {
+                      //   for (int i = 0; i < Data.product_cart.length; i++) {
+                      //     if (product.id == Data.product_cart[i].id) {
+                      //       product.quantity++;
+                      //       return;
+                      //     }
+                      //   }
+                      // }
+                      // Data.product_cart.add(product);
+                      // product.quantity++;
+                      Provider.of<CartProvider>(context,listen: false).addToCart(product, 1);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
