@@ -192,6 +192,7 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                             ),
                             SwitchListTile(
                               title: Text("Đặt làm mặc định"),
+                              activeColor: Colors.green,
                               value: makeDefaultSwitch[index],
                               onChanged: (val) {
                                 setState(() {
@@ -211,6 +212,8 @@ class _MyAddressScreenState extends State<MyAddressScreen> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                               ),
                               onPressed: () async {
                                 await Provider.of<AddressProvider>(

@@ -14,11 +14,10 @@ class ShippingAddressScreen extends StatefulWidget {
 
 class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
   String? _selectedAddressId;
-  late Address address;
+  Address? _selectedAddress;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<AddressProvider>(context, listen: false).getAddress();
@@ -56,14 +55,21 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
     );
   }
 
-  void _onNext(String id) {
-    if (_selectedAddressId == null) {
+  void _onNext() {
+    if (_selectedAddressId == null || _selectedAddress == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select an address.")),
+      );
       return;
     }
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PaymentMethodScreen(address_id: id),
+        builder:
+            (context) => PaymentMethodScreen(
+              address_id: _selectedAddress!.id.toString(),
+            ),
       ),
     );
   }
@@ -103,26 +109,30 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                           ),
                         )
                         .toList();
+
                 return ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: userAddresses.length,
                   itemBuilder: (context, index) {
-                    address = userAddresses[index];
+                    Address currentAddress = userAddresses[index];
+
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          _selectedAddressId = address.id.toString();
+                          _selectedAddressId = currentAddress.id.toString();
+                          _selectedAddress = currentAddress;
                         });
                         print(
-                          "Selected address: ${address.name}, ${address.address}, ${address.city}, ${address.country}, ${address.zipcode}, ${address.phone}",
+                          "Selected address: ${currentAddress.name}, ${currentAddress.address}",
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.only(bottom: 5),
+                        margin: const EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color:
-                                _selectedAddressId == address.id.toString()
+                                _selectedAddressId ==
+                                        currentAddress.id.toString()
                                     ? Colors.green
                                     : Colors.transparent,
                             width: 2,
@@ -135,22 +145,24 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                           child: Column(
                             children: [
                               ListTile(
-                                leading: Icon(
+                                leading: const Icon(
                                   Icons.location_on,
                                   color: Colors.green,
                                 ),
                                 title: Text(
-                                  address.name,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  currentAddress.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(address.address),
+                                    Text(currentAddress.address),
                                     Text(
-                                      "${address.city}, ${address.country} ${address.zipcode}",
+                                      "${currentAddress.city}, ${currentAddress.country} ${currentAddress.zipcode}",
                                     ),
-                                    Text(address.phone),
+                                    Text(currentAddress.phone),
                                   ],
                                 ),
                               ),
@@ -168,9 +180,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: ElevatedButton(
-              onPressed: () {
-                _onNext(address.id.toString());
-              },
+              onPressed: _onNext,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,

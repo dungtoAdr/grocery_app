@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/providers/category_provider.dart';
 import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screen/homepage/home/categories_screen.dart';
@@ -72,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Consumer2<CategoryProvider, ProductProvider>(
           builder: (context, categoryProvider, productProvider, child) {
             final categories = categoryProvider.categories;
-            final products = productProvider.products;
+            final allProducts = productProvider.products;
+            final products = allProducts.where((element) => element.isNew,).toList();
             return categories.isEmpty && products.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(

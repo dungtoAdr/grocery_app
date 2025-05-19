@@ -45,10 +45,11 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text("Order ID: ${order.id}"),
-                      subtitle: Text("Address ID: ${order.total.toString()}"),
+                      leading: Icon(Icons.card_giftcard,color: Colors.green,),
+                      title: Text("Order #${order.id}",style: TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Text("Order Total: \$${order.total.toString()}"),
                       trailing: IconButton(
-                        icon: Icon(isExpanded ? Icons.remove : Icons.add),
+                        icon: Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,color: Colors.green,),
                         onPressed: () {
                           setState(() {
                             if (isExpanded) {

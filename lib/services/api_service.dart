@@ -5,6 +5,7 @@ import 'package:grocery_app/models/category.dart';
 import 'package:grocery_app/models/order.dart';
 import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/models/profile_user.dart';
+import 'package:grocery_app/models/review.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -162,6 +163,39 @@ class ApiService {
       final response = await http.post(
         Uri.parse("$baseUrl/add_order.php"),
         body: jsonEncode(order.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error: $e");
+      return false;
+    }
+  }
+
+  // reviews
+  static Future<List<Review>> getReviews() async {
+    final response = await http.get(Uri.parse("$baseUrl/get_reviews.php"));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      if (jsonData['success']) {
+        List list = jsonData['data'];
+        return list.map((e) => Review.fromJson(e)).toList();
+      } else {
+        throw Exception("Loi api ${jsonData['message']}");
+      }
+    } else {
+      throw Exception("HTTP Error ${response.statusCode}");
+    }
+  }
+
+  static Future<bool> addReview(Review review) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/add_review.php"),
+        body: jsonEncode(review.toMap()),
       );
       if (response.statusCode == 200) {
         return true;
