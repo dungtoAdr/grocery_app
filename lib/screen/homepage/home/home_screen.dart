@@ -69,8 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Consumer2<CategoryProvider, ProductProvider>(
+      child: Consumer2<CategoryProvider, ProductProvider>(
           builder: (context, categoryProvider, productProvider, child) {
             final categories = categoryProvider.categories;
             final allProducts = productProvider.products;
@@ -263,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
           },
         ),
-      ),
     );
   }
 }

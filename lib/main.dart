@@ -4,6 +4,7 @@ import 'package:grocery_app/providers/address_provider.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/providers/category_provider.dart';
+import 'package:grocery_app/providers/favorite_provider.dart';
 import 'package:grocery_app/providers/order_provider.dart';
 import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/providers/review_provider.dart';
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AddressProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
         ChangeNotifierProvider(create: (context) => ReviewProvider()),
+        ChangeNotifierProvider(create: (context) => FavoriteProvider()),
       ],
       child: const MyApp(),
     ),

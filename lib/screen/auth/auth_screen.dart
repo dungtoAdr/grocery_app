@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/profile_user.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
@@ -59,9 +60,19 @@ class _AuthScreenState extends State<AuthScreen> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đăng ký thất bại: ${e.toString()}')),
+      final snackBar = SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: Duration(seconds: 3),
+        content: AwesomeSnackbarContent(
+          title: 'Đăng kí thất bại',
+          message: 'Thông tin đăng kí thiếu, vui lòng nhập đầy đủ thông tin',
+          contentType: ContentType.failure,
+        ),
       );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     } finally {
       setState(() => _isLoading = false);
     }
@@ -146,27 +157,27 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                             !widget.isLogin
                                 ? Column(
-                                  spacing: 10,
-                                  children: [
-                                    TextFormField(
-                                      keyboardType: TextInputType.phone,
-                                      controller: phoneController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: "Phone number",
-                                        prefixIcon: Icon(Icons.phone),
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      controller: nameController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: "Name",
-                                        prefixIcon: Icon(Icons.person),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                              spacing: 10,
+                              children: [
+                                TextFormField(
+                                  keyboardType: TextInputType.phone,
+                                  controller: phoneController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: "Phone number",
+                                    prefixIcon: Icon(Icons.phone),
+                                  ),
+                                ),
+                                TextFormField(
+                                  controller: nameController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: "Name",
+                                    prefixIcon: Icon(Icons.person),
+                                  ),
+                                ),
+                              ],
+                            )
                                 : SizedBox(),
                             TextFormField(
                               decoration: InputDecoration(
@@ -195,22 +206,22 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     widget.isLogin
                         ? Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ForgotScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Forgot password",
-                              style: TextStyle(color: Colors.blue),
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotScreen(),
                             ),
-                          ),
-                        )
+                          );
+                        },
+                        child: Text(
+                          "Forgot password",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    )
                         : SizedBox(height: 20),
                     Container(
                       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -228,13 +239,20 @@ class _AuthScreenState extends State<AuthScreen> {
                                 MaterialPageRoute(builder: (_) => HomePage()),
                               );
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Đăng nhập thất bại. Kiểm tra email và mật khẩu.",
-                                  ),
+                              final snackBar = SnackBar(
+                                elevation: 0,
+                                behavior: SnackBarBehavior.fixed,
+                                backgroundColor: Colors.transparent,
+                                duration: Duration(seconds: 2),
+                                content: AwesomeSnackbarContent(
+                                  title: 'Đăng nhập thất bại',
+                                  message: 'Tài khoản hoặc mật khẩu không chính xác',
+                                  contentType: ContentType.failure,
                                 ),
                               );
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(snackBar);
                             }
                             _formKey.currentState!.reset();
                           } else {

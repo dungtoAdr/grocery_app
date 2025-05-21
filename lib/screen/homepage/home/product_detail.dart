@@ -1,8 +1,10 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/models/review.dart';
 import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/favorite_provider.dart';
 import 'package:grocery_app/providers/review_provider.dart';
 import 'package:grocery_app/screen/homepage/home/reviews_screen.dart';
 import 'package:grocery_app/screen/utils/data.dart';
@@ -25,7 +27,7 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   void initState() {
     super.initState();
-      Provider.of<ReviewProvider>(context, listen: false).getReviews();
+    Provider.of<ReviewProvider>(context, listen: false).getReviews();
   }
 
   double calculateAverageRating(List<Review> reviews) {
@@ -42,7 +44,10 @@ class _ProductDetailState extends State<ProductDetail> {
       body: Consumer<ReviewProvider>(
         builder: (context, value, child) {
           List<Review> reviews = value.reviews;
-          List<Review> reviewsFilter = reviews.where((element) => element.product_id == widget.product.id,).toList();
+          List<Review> reviewsFilter =
+              reviews
+                  .where((element) => element.product_id == widget.product.id)
+                  .toList();
           avgRate = calculateAverageRating(reviewsFilter);
           return Container(
             height: double.infinity,
@@ -86,9 +91,25 @@ class _ProductDetailState extends State<ProductDetail> {
                               ),
                             ),
                             Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite_outline),
+                            Consumer<FavoriteProvider>(
+                              builder: (context, favoriteProvider, child) {
+                                final isFav = favoriteProvider.isFavorite(
+                                  widget.product.id.toString(),
+                                );
+                                return IconButton(
+                                  onPressed: () {
+                                    favoriteProvider.toggleFavorite(
+                                      widget.product,
+                                    );
+                                  },
+                                  icon: Icon(
+                                    isFav
+                                        ? Icons.favorite
+                                        : Icons.favorite_outline,
+                                    color: isFav ? Colors.red : Colors.black,
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -229,6 +250,22 @@ class _ProductDetailState extends State<ProductDetail> {
                                 context,
                                 listen: false,
                               ).addToCart(widget.product, quantity);
+                              final snackBar = SnackBar(
+                                elevation: 0,
+                                behavior: SnackBarBehavior.fixed,
+                                backgroundColor: Colors.transparent,
+                                duration: Duration(seconds: 1),
+                                content: AwesomeSnackbarContent(
+                                  color: Colors.green,
+                                  title: 'Giỏ hàng',
+                                  message:
+                                      'Thêm sản phẩm vào giỏ hàng thành công',
+                                  contentType: ContentType.success,
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(snackBar);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),

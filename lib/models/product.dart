@@ -22,7 +22,7 @@ class Product {
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       id: int.parse(map['id']),
-     name: map['name'],
+      name: map['name'],
       price: double.parse(map['price']),
       image: map['image'],
       weighed: map['weighed'],
@@ -32,8 +32,20 @@ class Product {
     );
   }
 
-  double totalPrice(){
-    return price * quantity;
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'image': image,
+      'weighed': weighed,
+      'category_id': category_id,
+      'quantity': quantity,
+      'isNew': isNew,
+    };
   }
 
+  double totalPrice() {
+    return price * quantity;
+  }
 }

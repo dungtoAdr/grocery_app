@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/product.dart';
 import 'package:grocery_app/providers/cart_provider.dart';
@@ -82,6 +83,21 @@ class ProductItem extends StatelessWidget {
                       // Data.product_cart.add(product);
                       // product.quantity++;
                       Provider.of<CartProvider>(context,listen: false).addToCart(product, 1);
+                      final snackBar = SnackBar(
+                        elevation: 0,
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.transparent,
+                        duration: Duration(seconds: 1),
+                        content: AwesomeSnackbarContent(
+                          color: Colors.green,
+                          title: 'Giỏ hàng',
+                          message: 'Thêm sản phẩm vào giỏ hàng thành công',
+                          contentType: ContentType.success,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(snackBar);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

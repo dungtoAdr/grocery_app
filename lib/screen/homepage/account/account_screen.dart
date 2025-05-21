@@ -76,9 +76,7 @@ class _AccountScreenState extends State<AccountScreen> {
     final auth = Provider.of<AuthProvider>(context, listen: false);
 
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        body: Consumer<UserProvider>(
+      child: Consumer<UserProvider>(
           builder: (context, value, child) {
             final users = value.users;
             final currentUser = FirebaseAuth.instance.currentUser;
@@ -209,7 +207,6 @@ class _AccountScreenState extends State<AccountScreen> {
             );
           },
         ),
-      ),
     );
   }
 }
