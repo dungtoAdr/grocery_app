@@ -50,23 +50,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC33I7CUJ-IpDcezgkpTXkFhZWva-mAhvI',
-    appId: '1:613254671357:android:d00f9187302f44ad948794',
-    messagingSenderId: '613254671357',
-    projectId: 'zolaapp-2895a',
-    databaseURL: 'https://zolaapp-2895a-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'zolaapp-2895a.firebasestorage.app',
+    apiKey: 'AIzaSyDE60zN1bLvqGFOMKJs1LmpvpSvGpYaXRE',
+    appId: '1:506873159632:android:857ff351976ad8c5fee3d5',
+    messagingSenderId: '506873159632',
+    projectId: 'appbanhang-d8faf',
+    storageBucket: 'appbanhang-d8faf.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAbltcfa_jMR0ZAyYXQr7q0pWPJNmArdEs',
-    appId: '1:613254671357:ios:99c11a68711fb64e948794',
-    messagingSenderId: '613254671357',
-    projectId: 'zolaapp-2895a',
-    databaseURL: 'https://zolaapp-2895a-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'zolaapp-2895a.firebasestorage.app',
-    androidClientId: '613254671357-98bfkk5165mqad5tcrua8h63km73tnrs.apps.googleusercontent.com',
-    iosClientId: '613254671357-07jmt07mnf7hs1rpummfg9fahd0lph8o.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDXvNU1dj385qA42OsUNINtD233d5qzDZE',
+    appId: '1:506873159632:ios:2920714926dab5aafee3d5',
+    messagingSenderId: '506873159632',
+    projectId: 'appbanhang-d8faf',
+    storageBucket: 'appbanhang-d8faf.firebasestorage.app',
+    androidClientId: '506873159632-8aad0koaap2skg0t2v1loulpc1d7ka69.apps.googleusercontent.com',
+    iosClientId: '506873159632-s51rrf0vnhli7d15nt0k1rh66fumrtfs.apps.googleusercontent.com',
     iosBundleId: 'com.example.groceryApp',
   );
+
 }

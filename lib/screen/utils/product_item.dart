@@ -44,11 +44,14 @@ class ProductItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 0),
               child: Column(
                 children: [
-                  Image.asset(
-                    product.image,
-                    height: 94,
-                    width: 91,
-                    fit: BoxFit.fill,
+                  Hero(
+                    tag: "${product.image}${product.id}",
+                    child: Image.asset(
+                      product.image,
+                      height: 94,
+                      width: 91,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   Text(
                     "\$${product.price}",

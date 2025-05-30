@@ -42,7 +42,8 @@ dependencies:
   image_picker: ^1.1.2
   shared_preferences: ^2.5.3
   awesome_snackbar_content: ^0.1.6
-
+  firebase_messaging: ^15.2.6
+  googleapis_auth: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -95,6 +96,7 @@ flutter:
     - assets/lemon.png
     - assets/baby_care.png
     - assets/peach.png
+    - assets/serviceAccountKey.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

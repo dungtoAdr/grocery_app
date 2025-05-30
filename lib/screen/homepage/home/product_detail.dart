@@ -58,9 +58,15 @@ class _ProductDetailState extends State<ProductDetail> {
                   color: Colors.green[50],
                   height: 400,
                   width: 480,
-                  child: Image.asset(widget.product.image, fit: BoxFit.contain),
+                  child: Hero(
+                    tag: "${widget.product.image}${widget.product.id}",
+                    child: Image.asset(
+                      widget.product.image,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.grey[200],

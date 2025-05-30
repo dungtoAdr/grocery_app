@@ -9,7 +9,7 @@ import 'package:grocery_app/models/review.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "http://192.168.1.15/grocery";
+  static const String baseUrl = "http://192.168.1.13/grocery";
 
   static Future<List<Category>> getCategories() async {
     final response = await http.get(Uri.parse('$baseUrl/get_categories.php'));
